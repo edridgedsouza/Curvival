@@ -16,7 +16,9 @@ source("datasets.R")
 
 shinyServer(function(input, output) {
 
-  output$caption <- renderText(input$plotTitle)
+  #output$caption <- renderText(input$plotTitle)
+  
+  
   output$survPlot <- renderPlot({
     survdata <- input$datafile
 
@@ -36,7 +38,8 @@ shinyServer(function(input, output) {
       ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
         geom_step() +
         returnTheme(input$theme) + returnColorScale(input$colorscale) +
-        coord_fixed(ratio=as.numeric(input$asprat))
+        coord_fixed(ratio=as.numeric(input$asprat)) +
+        ggtitle(input$plotTitle)
       
     }
   })

@@ -64,8 +64,12 @@ shinyUI(fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      h3(textOutput("caption")),
-      plotOutput("survPlot")
+      tabsetPanel(
+        tabPanel("Plot",
+          #h3(textOutput("caption")),
+          plotOutput("survPlot")
+          )
+        )
     )
   )
 ))
