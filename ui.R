@@ -7,6 +7,9 @@
 
 library(shiny)
 
+source("functions.R")
+source("datasets.R")
+
 shinyUI(fluidPage(
 
   # Application title
@@ -51,7 +54,9 @@ shinyUI(fluidPage(
                     'Classic'='classic',
                     'Minimal'='minimal',
                     'Line Drawing'='linedraw'),
-                  'Grey')
+                  'Grey'),
+      
+      selectInput('colorscale', 'ColorBrewer Scale', c(Choose='', colorOpts), selectize=TRUE)
     ),
 
     # Show a plot of the generated distribution

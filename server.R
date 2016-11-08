@@ -12,6 +12,7 @@ library(ggplot2)
 library(reshape2)
 
 source("functions.R")
+source("datasets.R")
 
 shinyServer(function(input, output) {
 
@@ -34,7 +35,7 @@ shinyServer(function(input, output) {
       
       ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
         geom_step() +
-        returnTheme(input$theme)
+        returnTheme(input$theme) + returnColorScale(input$colorscale)
       
     }
   })
