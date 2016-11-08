@@ -14,6 +14,7 @@ shinyUI(fluidPage(
 
   # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
   sidebarLayout(
+    
     sidebarPanel(
       fileInput('datafile', 'Choose file to upload',
                 accept = c(
@@ -25,7 +26,9 @@ shinyUI(fluidPage(
                   '.tsv'
                 )
       ),
+      
       tags$hr(),
+      
       checkboxInput('header', 'Header', TRUE),
       selectInput('sep', 'Separator',
                    c(Tab='\t',
@@ -35,7 +38,10 @@ shinyUI(fluidPage(
                    c('No quotes'='',
                      'Double Quote'='"',
                      'Single Quote'="'")),
+      
       tags$hr(),
+      textInput('plotTitle', 'Plot Title', value = "Survival Curve"),
+      
       selectInput('theme','Plot Theme',
                   c('Black and White'='bw',
                     'Dark'='dark',

@@ -15,7 +15,7 @@ source("functions.R")
 
 shinyServer(function(input, output) {
 
-  output$caption <- renderText("Blah Blah")
+  output$caption <- renderText(input$plotTitle)
   output$survPlot <- renderPlot({
     survdata <- input$datafile
 
