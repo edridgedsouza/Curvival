@@ -11,6 +11,8 @@ library(magrittr)
 library(ggplot2)
 library(reshape2)
 
+source("functions.R")
+
 shinyServer(function(input, output) {
 
   output$caption <- renderText("Blah Blah")
@@ -31,7 +33,8 @@ shinyServer(function(input, output) {
       
       
       ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
-        geom_step()
+        geom_step() +
+        returnTheme(input$theme)
       
     }
   })

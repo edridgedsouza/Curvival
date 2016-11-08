@@ -27,16 +27,26 @@ shinyUI(fluidPage(
       ),
       tags$hr(),
       checkboxInput('header', 'Header', TRUE),
-      radioButtons('sep', 'Separator',
+      selectInput('sep', 'Separator',
                    c(Tab='\t',
                      Comma=',',
                      Semicolon=';')),
-      radioButtons('quote', 'Quote',
-                   c(None='',
+      selectInput('quote', 'Quote',
+                   c('No quotes'='',
                      'Double Quote'='"',
-                     'Single Quote'="'"),
-                   '')
-      ),
+                     'Single Quote'="'")),
+      tags$hr(),
+      selectInput('theme','Plot Theme',
+                  c('Black and White'='bw',
+                    'Dark'='dark',
+                    'Grey'='grey',
+                    'Void'='void',
+                    'Light'='light',
+                    'Classic'='classic',
+                    'Minimal'='minimal',
+                    'Line Drawing'='linedraw'),
+                  'Grey')
+    ),
 
     # Show a plot of the generated distribution
     mainPanel(
