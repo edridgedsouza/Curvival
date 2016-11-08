@@ -24,3 +24,4 @@ returnColorScale <- function(colortext){
     
   }
 }
+

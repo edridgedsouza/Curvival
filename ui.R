@@ -54,8 +54,13 @@ shinyUI(fluidPage(
                     'Line Drawing'='linedraw'),
                   'Grey', multiple=FALSE),
       
-      selectInput('colorscale', 'ColorBrewer Scale', c(Choose='', colorOpts), selectize=TRUE, multiple=FALSE)
-    ),
+      selectInput('colorscale', 'ColorBrewer Scale', 
+                  c(Choose='', colorOpts), 
+                  selectize=TRUE, 
+                  multiple=FALSE),
+      
+      sliderInput('asprat', 'Aspect Ratio', value=1, min =0 , max = 3, step=0.01)
+      ),
 
     # Show a plot of the generated distribution
     mainPanel(

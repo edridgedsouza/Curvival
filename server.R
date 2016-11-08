@@ -35,7 +35,8 @@ shinyServer(function(input, output) {
       
       ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
         geom_step() +
-        returnTheme(input$theme) + returnColorScale(input$colorscale)
+        returnTheme(input$theme) + returnColorScale(input$colorscale) +
+        coord_fixed(ratio=as.numeric(input$asprat))
       
     }
   })
