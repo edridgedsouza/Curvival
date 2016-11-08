@@ -6,22 +6,34 @@
 #
 
 library(shiny)
+library(dplyr)
+library(magrittr)
 library(ggplot2)
+library(reshape2)
 
 shinyServer(function(input, output) {
 
   output$caption <- renderText("Blah Blah")
-  output$distPlot <- renderPlot({
+  output$survPlot <- renderPlot({
+    survdata <- input$datafile
 
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    #bins <- seq(min(x), max(x), length.out = input$bins + 1)
-    range <- max(x) - min(x)
-    
-    # draw the histogram with the specified number of bins
-    #hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    p <- ggplot(faithful, aes(eruptions)) + geom_histogram(binwidth=(range/input$bins))
-    print(p)
+    if (is.null(survdata)){
+      return(NULL)
+    }
+    else {
+      data <- read.csv(survdata$datapath, header = input$header,
+                       sep = input$sep, quote = input$quote)
+      colnames(data)[1] <- "Time"
+      longdata <- data %>% melt(id = "Time", 
+                                variable.name = "Setting", 
+                                value.name = "Survival")
+      
+      
+      
+      ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
+        geom_step()
+      
+    }
   })
 
 })

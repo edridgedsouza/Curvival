@@ -15,7 +15,7 @@ shinyUI(fluidPage(
   # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
   sidebarLayout(
     sidebarPanel(
-      fileInput('file1', 'Choose file to upload',
+      fileInput('datafile', 'Choose file to upload',
                 accept = c(
                   'text/csv',
                   'text/comma-separated-values',
@@ -28,21 +28,20 @@ shinyUI(fluidPage(
       tags$hr(),
       checkboxInput('header', 'Header', TRUE),
       radioButtons('sep', 'Separator',
-                   c(Comma=',',
-                     Semicolon=';',
-                     Tab='\t'),
-                   ','),
+                   c(Tab='\t',
+                     Comma=',',
+                     Semicolon=';')),
       radioButtons('quote', 'Quote',
                    c(None='',
                      'Double Quote'='"',
                      'Single Quote'="'"),
-                   '"')
+                   '')
       ),
 
     # Show a plot of the generated distribution
     mainPanel(
       h3(textOutput("caption")),
-      plotOutput("curvPlot")
+      plotOutput("survPlot")
     )
   )
 ))
