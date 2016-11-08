@@ -30,8 +30,6 @@ shinyUI(fluidPage(
                 )
       ),
       
-      tags$hr(),
-      
       checkboxInput('header', 'Header', TRUE),
       selectInput('sep', 'Separator',
                    c(Tab='\t',
@@ -54,9 +52,9 @@ shinyUI(fluidPage(
                     'Classic'='classic',
                     'Minimal'='minimal',
                     'Line Drawing'='linedraw'),
-                  'Grey'),
+                  'Grey', multiple=FALSE),
       
-      selectInput('colorscale', 'ColorBrewer Scale', c(Choose='', colorOpts), selectize=TRUE)
+      selectInput('colorscale', 'ColorBrewer Scale', c(Choose='', colorOpts), selectize=TRUE, multiple=FALSE)
     ),
 
     # Show a plot of the generated distribution
