@@ -37,11 +37,13 @@ shinyServer(function(input, output) {
       
       ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
         geom_step(direction = "vh") +
-        returnTheme(input$theme) + returnColorScale(input$colorscale) +
+        returnTheme(input$theme) + 
+        returnColorScale(input$colorscale) +
         coord_fixed(ratio=as.numeric(input$asprat)) +
+        returnTransparent(input$transparent) +
         ggtitle(input$plotTitle)
       
     }
-  })
+  }, bg="transparent")
 
 })

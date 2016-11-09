@@ -25,3 +25,17 @@ returnColorScale <- function(colortext){
   }
 }
 
+returnTransparent <- function(bool){
+  if (bool){
+    x <- theme( # https://stackoverflow.com/a/7455481/5905166
+      panel.background = element_blank(),
+      plot.background = element_rect(fill = "transparent",colour = "transparent"),
+      legend.key = element_rect(fill = "transparent", colour = "transparent")
+    )
+    return(x)
+  }
+  else {
+    return(NULL)
+  }
+  }
+  

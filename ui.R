@@ -6,14 +6,15 @@
 #
 
 library(shiny)
+library(shinythemes)
 
 source("functions.R")
 source("datasets.R")
 
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = shinytheme("slate"),
 
   # Application title
-  titlePanel("Curvival"),
+  headerPanel("Curvival", windowTitle = "Curvival App"),
 
   # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
   sidebarLayout(
@@ -58,6 +59,7 @@ shinyUI(fluidPage(
                   c(Choose='', colorOpts), 
                   selectize=TRUE, 
                   multiple=FALSE),
+      checkboxInput('transparent', 'Transparency', value = FALSE),
       
       sliderInput('asprat', 'Aspect Ratio', value=1, min =0 , max = 3, step=0.01)
       ),
