@@ -53,7 +53,7 @@ shinyUI(fluidPage(theme = shinytheme("slate"),
                     'Classic'='classic',
                     'Minimal'='minimal',
                     'Line Drawing'='linedraw'),
-                  'Grey', multiple=FALSE),
+                  'grey', multiple=FALSE),
       
       selectInput('colorscale', 'ColorBrewer Scale', 
                   c(Choose='', colorOpts), 
