@@ -1,4 +1,5 @@
 
+
 # This is the server logic for a Shiny web application.
 # You can find out more about building applications with Shiny here:
 #
@@ -16,37 +17,41 @@ source("functions.R")
 source("datasets.R")
 
 shinyServer(function(input, output) {
-
   #output$caption <- renderText(input$plotTitle)
   
   
   output$survPlot <- renderPlot({
     survdata <- input$datafile
-
+    
     if (is.null(survdata)) {
       return(NULL)
     }
     else {
-      data <- read.csv(survdata$datapath, header = input$header,
-                       sep = input$sep, quote = input$quote, check.names=FALSE)
+      data <- read.csv(
+        survdata$datapath,
+        header = input$header,
+        sep = input$sep,
+        quote = input$quote,
+        check.names = FALSE
+      )
       colnames(data)[1] <- "Time"
-      longdata <- data %>% melt(id = "Time", 
-                                variable.name = "Setting", 
+      longdata <- data %>% melt(id = "Time",
+                                variable.name = "Setting",
                                 value.name = "Survival")
       
       
-      ggplot(longdata, aes(x = Time, y = Survival, color = Setting)) + 
+      ggplot(longdata, aes(x = Time, y = Survival, color = Setting)) +
         geom_step(direction = "vh") +
-        returnTheme(input$theme) + 
+        returnTheme(input$theme) +
         returnColorScale(input$colorscale) +
         coord_fixed(ratio = as.numeric(input$asprat)) +
         returnTransparent(input$transparent) +
-        ggtitle(input$plotTitle) + 
+        ggtitle(input$plotTitle) +
         hasLabels(input$labels, longdata)
       
     }
   }, bg = "transparent")
-
+  
   # Focus on the dose-response curve tab now
   
   output$doseResponse <- renderPlot({
@@ -55,27 +60,39 @@ shinyServer(function(input, output) {
       return(NULL)
     }
     else{
-    data <- read.csv(survdata$datapath, header = input$header,
-                     sep = input$sep, quote = input$quote, check.names=FALSE)
-    colnames(data)[1] <- "Time"
-    longdata <- data %>% melt(id = "Time",
-                              variable.name = "Setting",
-                              value.name = "Survival")
-
-    
-  pure_longdata <- longdata %>%  # Extract only the numbers from the concentration settings
-    mutate(Setting = as.character(lapply(Setting, 
-                            function(x){gsub("(\\d*)\\D*","\\1",x)}))
-    ) %>%
-    as.data.frame()
-  
-  output$doseResponse <- renderPlot({ # Will change this later, only temporary
-    ggplot(pure_longdata, aes(x = Time, y = Survival, color = Setting)) + 
-      geom_step(direction = "vh")
-  })
+      data <- read.csv(
+        survdata$datapath,
+        header = input$header,
+        sep = input$sep,
+        quote = input$quote,
+        check.names = FALSE
+      )
+      colnames(data)[1] <- "Time"
+      longdata <- data %>% melt(id = "Time",
+                                variable.name = "Setting",
+                                value.name = "Survival")
+      
+      
+      pure_longdata <-
+        longdata %>%  # Extract only the numbers from the concentration settings
+        mutate(Setting = as.character(lapply(Setting,
+                                             function(x) {
+                                               gsub("(\\d*)\\D*", "\\1", x)
+                                             }))) %>%
+        as.data.frame()
+      
+      output$doseResponse <-
+        renderPlot({
+          # Will change this later, only temporary
+          ggplot(pure_longdata, aes(
+            x = Time,
+            y = Survival,
+            color = Setting
+          )) +
+            geom_step(direction = "vh")
+        })
     }
-  }
-  )
+  })
   
   
 })
