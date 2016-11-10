@@ -6,6 +6,7 @@
 #
 
 library(shiny)
+library(DT)
 library(dplyr)
 library(magrittr)
 library(ggplot2)
@@ -27,14 +28,11 @@ shinyServer(function(input, output) {
     }
     else {
       data <- read.csv(survdata$datapath, header = input$header,
-                       sep = input$sep, quote = input$quote)
+                       sep = input$sep, quote = input$quote, check.names=FALSE)
       colnames(data)[1] <- "Time"
       longdata <- data %>% melt(id = "Time", 
                                 variable.name = "Setting", 
                                 value.name = "Survival")
-      
-     
-      
       
       
       ggplot(longdata, aes(x = Time, y = Survival, color = Setting)) + 
@@ -49,4 +47,35 @@ shinyServer(function(input, output) {
     }
   }, bg = "transparent")
 
+  # Focus on the dose-response curve tab now
+  
+  output$doseResponse <- renderPlot({
+    survdata <- input$datafile
+    if (is.null(survdata)) {
+      return(NULL)
+    }
+    else{
+    data <- read.csv(survdata$datapath, header = input$header,
+                     sep = input$sep, quote = input$quote, check.names=FALSE)
+    colnames(data)[1] <- "Time"
+    longdata <- data %>% melt(id = "Time",
+                              variable.name = "Setting",
+                              value.name = "Survival")
+
+    
+  pure_longdata <- longdata %>%  # Extract only the numbers from the concentration settings
+    mutate(Setting = as.character(lapply(Setting, 
+                            function(x){gsub("(\\d*)\\D*","\\1",x)}))
+    ) %>%
+    as.data.frame()
+  
+  output$doseResponse <- renderPlot({ # Will change this later, only temporary
+    ggplot(pure_longdata, aes(x = Time, y = Survival, color = Setting)) + 
+      geom_step(direction = "vh")
+  })
+    }
+  }
+  )
+  
+  
 })

@@ -7,6 +7,7 @@
 
 library(shiny)
 library(shinythemes)
+library(DT)
 
 source("functions.R")
 source("datasets.R")
@@ -71,6 +72,9 @@ shinyUI(fluidPage(theme = shinytheme("slate"),
         tabPanel("Plot",
           #h3(textOutput("caption")),
           plotOutput("survPlot")
+          ),
+        tabPanel("Dose response",
+                 plotOutput("doseResponse") # Not permanent, will change to plotOutput
           )
         )
     )
