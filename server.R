@@ -1,5 +1,6 @@
 
 
+
 # This is the server logic for a Shiny web application.
 # You can find out more about building applications with Shiny here:
 #
@@ -79,18 +80,16 @@ shinyServer(function(input, output) {
                                              function(x) {
                                                gsub("(\\d*)\\D*", "\\1", x)
                                              }))) %>%
+        mutate(Setting = -1*log10(as.numeric(Setting)) %>% round(3)) %>%
+        mutate(Setting = as.factor(Setting)) %>%
         as.data.frame()
       
-      output$doseResponse <-
-        renderPlot({
-          # Will change this later, only temporary
-          ggplot(pure_longdata, aes(
-            x = Time,
-            y = Survival,
-            color = Setting
-          )) +
-            geom_step(direction = "vh")
-        })
+      # Will change this later, only temporary
+      ggplot(pure_longdata, aes(x = Time,
+                                y = Survival,
+                                color = Setting)) +
+        geom_step(direction = "vh")
+      
     }
   })
   
