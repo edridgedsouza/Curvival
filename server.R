@@ -33,6 +33,8 @@ shinyServer(function(input, output) {
                                 variable.name = "Setting", 
                                 value.name = "Survival")
       
+     
+      
       
       
       ggplot(longdata, aes(x = Time, y = Survival, color = Setting)) + 
@@ -41,7 +43,8 @@ shinyServer(function(input, output) {
         returnColorScale(input$colorscale) +
         coord_fixed(ratio = as.numeric(input$asprat)) +
         returnTransparent(input$transparent) +
-        ggtitle(input$plotTitle)
+        ggtitle(input$plotTitle) + 
+        hasLabels(input$labels, longdata)
       
     }
   }, bg = "transparent")

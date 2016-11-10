@@ -60,6 +60,7 @@ shinyUI(fluidPage(theme = shinytheme("slate"),
                   selectize = TRUE, 
                   multiple = FALSE),
       checkboxInput('transparent', 'Transparency', value = FALSE),
+      checkboxInput('labels', 'Labels', value = FALSE),
       
       sliderInput('asprat', 'Aspect Ratio', value = 1, min = 0 , max = 3, step = 0.01)
       ),

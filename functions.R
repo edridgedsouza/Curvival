@@ -37,5 +37,20 @@ returnTransparent <- function(bool){
   else {
     return(NULL)
   }
+}
+
+hasLabels <- function(bool, dataframe) {
+  if (bool){
+    labeldata <- dataframe %>% group_by(Setting) %>% filter(Time==max(Time))
+    return(geom_label(
+      data = labeldata,
+      aes(label = Setting),
+      hjust = 1,
+      vjust = -0.25
+    ))
   }
+  else{
+    return(NULL)
+  }
+}
   
