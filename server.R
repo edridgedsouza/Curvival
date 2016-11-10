@@ -22,7 +22,7 @@ shinyServer(function(input, output) {
   output$survPlot <- renderPlot({
     survdata <- input$datafile
 
-    if (is.null(survdata)){
+    if (is.null(survdata)) {
       return(NULL)
     }
     else {
@@ -35,15 +35,15 @@ shinyServer(function(input, output) {
       
       
       
-      ggplot(longdata, aes(x = Time, y = Survival, color=Setting)) + 
+      ggplot(longdata, aes(x = Time, y = Survival, color = Setting)) + 
         geom_step(direction = "vh") +
         returnTheme(input$theme) + 
         returnColorScale(input$colorscale) +
-        coord_fixed(ratio=as.numeric(input$asprat)) +
+        coord_fixed(ratio = as.numeric(input$asprat)) +
         returnTransparent(input$transparent) +
         ggtitle(input$plotTitle)
       
     }
-  }, bg="transparent")
+  }, bg = "transparent")
 
 })
