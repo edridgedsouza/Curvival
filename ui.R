@@ -33,7 +33,6 @@ shinyUI(fluidPage(theme = shinytheme("slate"),
                                 )
                       ),
                       
-                      checkboxInput('header', 'Header', TRUE),
                       selectInput('sep', 'Separator',
                                   c(Tab = '\t',
                                     Comma = ',',

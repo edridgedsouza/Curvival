@@ -54,6 +54,7 @@ hasLabels <- function(bool, dataframe) {
   }
 }
 
+# To do: doseResponseSummary summarizer function
 
 # To do: dose response regression with nls(response ~ sSlogis(log10dose, Asym, xmid, scal), data = doseResponseSummary)
 # Rudimentary: plot(log10dose, response); model <- nls(blahblah)

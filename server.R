@@ -30,7 +30,7 @@ shinyServer(function(input, output) {
     else {
       data <- read.csv(
         survdata$datapath,
-        header = input$header,
+        header = TRUE,
         sep = input$sep,
         quote = input$quote,
         check.names = FALSE
@@ -56,6 +56,8 @@ shinyServer(function(input, output) {
   # Focus on the dose-response curve tab now
   
   output$doseResponse <- renderPlot({
+    
+    # Still have to re-load this all bc dynamic loading or something
     survdata <- input$datafile
     if (is.null(survdata)) {
       return(NULL)
@@ -63,7 +65,7 @@ shinyServer(function(input, output) {
     else{
       data <- read.csv(
         survdata$datapath,
-        header = input$header,
+        header = TRUE,
         sep = input$sep,
         quote = input$quote,
         check.names = FALSE
@@ -92,6 +94,4 @@ shinyServer(function(input, output) {
       
     }
   })
-  
-  
 })
