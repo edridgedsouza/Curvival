@@ -158,6 +158,7 @@ shinyUI(
       headerPanel("Curvival Help", windowTitle = "Curvival App")
     ),
     
+    # Footer
     hr(),
     div(
       style = "text-align:center; padding: 10px;line-height: 1.7em;",
@@ -168,8 +169,14 @@ shinyUI(
         height = 25,
         width = 25
       )),
-      a(href = "https://github.com/edridgedsouza/Curvival", img(
-        src = "img/globe.png",
+      # Credit: Google Material icons used here, under Apache License
+      a(href = "http://marksteinlab.org/", img(
+        src = "img/globe.svg",
+        height = 25,
+        width = 25
+      )),
+      a(href = "mailto:mmarkstein@bio.umass.edu&cc=edsouza@umass.edu;edridge@gmail.com&subject=Curvival", img(
+        src = "img/mail.svg",
         height = 25,
         width = 25
       )),
