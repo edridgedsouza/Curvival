@@ -1,4 +1,3 @@
-
 # This is the user-interface definition of a Shiny web application.
 # You can find out more about building applications with Shiny here:
 #
@@ -13,10 +12,10 @@ library(DT)
 source("functions.R")
 source("datasets.R")
 
-shinyUI(fluidPage(theme = shinytheme("slate"),
+shinyUI(navbarPage("Curvival!", theme = shinytheme("yeti"),
                   
                   # Application title
-                  headerPanel("Curvival", windowTitle = "Curvival App"),
+                  # headerPanel("Curvival", windowTitle = "Curvival App"),
                   
                   # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
                   sidebarLayout(
