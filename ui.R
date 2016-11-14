@@ -17,12 +17,8 @@ shinyUI(
   navbarPage(
     theme = shinytheme("yeti"),
     #Looks best with yeti, but use slate for testing transparency
-    title = div(
-      img(src = ""),
-      a(style = " text-decoration:none;color:white;", href = "#" , "Curvival!")
-    ),
-    # Keep this here for when we get an icon
     
+    title = "Curvival!",
     
     # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
     tabPanel(
