@@ -46,7 +46,8 @@ hasLabels <- function(bool, dataframe) {
       data = labeldata,
       aes(label = Setting),
       hjust = 1,
-      vjust = -0.25
+      vjust = -0.25,
+      show.legend = FALSE
     ))
   }
   else{

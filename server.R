@@ -93,7 +93,7 @@ shinyServer(function(input, output) {
         coord_fixed(ratio = as.numeric(input$dr.asprat)) +
         returnTransparent(input$dr.transparent) +
         ggtitle(input$dr.plotTitle) +
-        hasLabels(input$dr.labels, longdata)
+        hasLabels(input$dr.labels, pure_longdata)
       
     }
   }, bg = "transparent")
