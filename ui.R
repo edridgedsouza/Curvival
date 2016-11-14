@@ -7,14 +7,15 @@
 
 library(shiny)
 library(shinythemes)
+library(htmltools)
 library(DT)
 
 source("functions.R")
 source("datasets.R")
 
 shinyUI(navbarPage(
-  "Curvival!",
-  theme = shinytheme("cyborg"),
+  theme = shinytheme("yeti"), #Looks best with yeti, but use slate for testing transparency
+  title = div(img(src=""), "Curvival!"), # Keep this here for when we get an icon
   
 
   # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
@@ -144,6 +145,15 @@ shinyUI(navbarPage(
            
            ),
   tabPanel("Help", headerPanel("Curvival Help", windowTitle = "Curvival App")
-           )
+           ),
+  
+  hr(),
+  div(style="text-align:center; padding: 10px;line-height: 1.7em;", 
+      "2016 Edridge D'Souza, Markstein Lab. Distributed under the MIT License.",
+      br(),
+      a(href="https://github.com/edridgedsouza/Curvival", img(src="img/github.png", height=25, width=25)),
+      a(href="https://github.com/edridgedsouza/Curvival", img(src="img/globe.png", height=25, width=25)),
+      a(href="https://www.bio.umass.edu/biology/", img(src="img/umass.png", height=25, width=25))
+      )
   
 ))
