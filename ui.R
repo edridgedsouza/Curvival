@@ -14,7 +14,7 @@ source("datasets.R")
 
 shinyUI(navbarPage(
   "Curvival!",
-  theme = shinytheme("yeti"),
+  theme = shinytheme("cyborg"),
   
 
   # https://github.com/rstudio/shiny-examples/blob/master/066-upload-file/ui.R
@@ -95,7 +95,53 @@ shinyUI(navbarPage(
              mainPanel(plotOutput("survPlot"))
            )),
   tabPanel("Dose Response", 
-           headerPanel("Curvival Dose Response Plot", windowTitle = "Curvival App")
+           headerPanel("Curvival Dose Response Plot", windowTitle = "Curvival App"),
+           sidebarLayout(
+             sidebarPanel(
+               textInput('dr.plotTitle', 'Plot Title', value = "Dose Response Curve"),
+               
+               selectInput(
+                 'dr.theme',
+                 'Plot Theme',
+                 c(
+                   'Black and White' = 'bw',
+                   'Dark' = 'dark',
+                   'Grey' = 'grey',
+                   'Void' = 'void',
+                   'Light' = 'light',
+                   'Classic' = 'classic',
+                   'Minimal' = 'minimal',
+                   'Line Drawing' = 'linedraw'
+                 ),
+                 'grey',
+                 multiple = FALSE
+               ),
+               
+               selectInput(
+                 'dr.colorscale',
+                 'ColorBrewer Scale',
+                 c(Choose = '', colorOpts),
+                 selectize = TRUE,
+                 multiple = FALSE
+               ),
+               checkboxInput('dr.transparent', 'Transparency', value = FALSE),
+               checkboxInput('dr.labels', 'Labels', value = FALSE),
+               
+               sliderInput(
+                 'dr.asprat',
+                 'Aspect Ratio',
+                 value = 1,
+                 min = 0 ,
+                 max = 3,
+                 step = 0.01
+               )
+             ),
+             
+             # Show a plot of the generated distribution
+             mainPanel(plotOutput("doseResponse"))
+           )
+           
+           
            ),
   tabPanel("Help", headerPanel("Curvival Help", windowTitle = "Curvival App")
            )
