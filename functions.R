@@ -57,23 +57,40 @@ hasLabels <- function(bool, dataframe) {
 
 # To do: doseResponseSummary summarizer function
 
+
+
+
 summarizeDoses <- function(pureLongdata , survPercent = 50) {
+  
+  meanTime <- function(time, survival) {
+    if (which(survival == survPercent) %>% any){
+      return(time[min(which(survival == survPercent))])
+    }
+    else{
+        above <- max(which(survival > survPercent))
+        below <- min(which(survival < survPercent))
+        meantime <- mean(c(time[above], time[below]))
+        return(meantime)
+    }
+  }
+  
+  meanSurv <- function(survival) {
+    if (which(survival == survPercent) %>% any){
+      return(survival[min(which(survival == survPercent))])
+    }
+    else{
+      above <- max(which(survival > survPercent))
+      below <- min(which(survival < survPercent))
+      meansurv <- mean(c(survival[above], survival[below]))
+      return(meansurv)
+    }
+  }
+
+  
   summarized <- pureLongdata %>% group_by(Setting) %>%
     summarize(
-      Time = function(Time) {
-        above <- max(which(Survival %>% unlist %>% as.numeric > survPercent))
-        below <-
-          min(which(Survival %>% unlist %>% as.numeric < survPercent))
-        meanTime <- mean(c(Time[above], Time[below]))
-        return(meanTime)
-      },
-      Survival = function(Survival) {
-        above <- max(which(Survival %>% unlist %>% as.numeric > survPercent))
-        below <-
-          min(which(Survival %>% unlist %>% as.numeric < survPercent))
-        meanSurv <- mean(c(Survival[above], Survival[below]))
-        return(meanSurv)
-      }
+      Time = meanTime(Time, Survival),
+      Survival = meanSurv(Survival)
     )
   
   return(summarized)
