@@ -55,10 +55,10 @@ hasLabels <- function(bool, dataframe) {
   }
 }
 
-# To do: doseResponseSummary summarizer function
 
-
-
+# Take the long data table and summarize it such that:
+# for a given percentage survival, you find the amount of time
+# at each concentration that it takes to get to that percentage.
 
 summarizeDoses <- function(pureLongdata , survPercent = 50) {
   
@@ -69,28 +69,24 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
     else{
         above <- max(which(survival > survPercent))
         below <- min(which(survival < survPercent))
-        meantime <- mean(c(time[above], time[below]))
+        
+        aboveSurv <- survival[above]
+        belowSurv <- survival[below]
+        aboveTime <- time[above]
+        belowTime <- time[below]
+        
+        ratio <- (survPercent - belowSurv)/(aboveSurv - belowSurv)
+        
+        meantime <- belowTime + ratio * (aboveTime - belowTime)
         return(meantime)
     }
   }
   
-  meanSurv <- function(survival) {
-    if (which(survival == survPercent) %>% any){
-      return(survival[min(which(survival == survPercent))])
-    }
-    else{
-      above <- max(which(survival > survPercent))
-      below <- min(which(survival < survPercent))
-      meansurv <- mean(c(survival[above], survival[below]))
-      return(meansurv)
-    }
-  }
-
   
   summarized <- pureLongdata %>% group_by(Setting) %>%
     summarize(
       Time = meanTime(Time, Survival),
-      Survival = meanSurv(Survival)
+      Survival = survPercent # Rather than taking a simple mean and approximating this, we find an exact ratio so we always get the exact survPercent
     )
   
   return(summarized)
