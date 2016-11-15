@@ -46,7 +46,7 @@ shinyServer(function(input, output) {
         returnTransparent(input$transparent) +
         ggtitle(input$plotTitle) +
         hasLabels(input$labels, longdata) +
-        returnPercentageLine(bool = input$bool.percentage, 
+        returnPercentageLine(bool = input$bool.percentage,
                              yint = input$percentage)
     }
   }, bg = "transparent")
@@ -54,7 +54,6 @@ shinyServer(function(input, output) {
   # Focus on the dose-response curve tab now
   
   output$doseResponse <- renderPlot({
-    
     # Still have to re-load this all bc dynamic loading or something
     survdata <- input$datafile
     if (is.null(survdata)) {
@@ -80,12 +79,12 @@ shinyServer(function(input, output) {
                                              function(x) {
                                                gsub("(\\d*)\\D*", "\\1", x)
                                              }))) %>%
-        mutate(Setting = -1*log10(as.numeric(Setting)) %>% round(3)) %>%
+        mutate(Setting = -1 * log10(as.numeric(Setting)) %>% round(3)) %>%
         mutate(Setting = as.factor(Setting)) %>%
         as.data.frame()
       
       # Will change this later, only temporary
-      ggplot(summarizeDoses(pure_longdata, input$dr.percentage), 
+      ggplot(summarizeDoses(pure_longdata, input$dr.percentage),
              aes(x = Setting, y = Time)) +
         geom_point(aes(color = Setting)) +
         returnTheme(input$dr.theme) +
