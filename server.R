@@ -73,7 +73,7 @@ shinyServer(function(input, output) {
                                 value.name = "Survival")
       
       
-      pure_longdata <-
+      pure_longdata <- # Needs more intelligent unit parser
         longdata %>%  # Extract only the numbers from the concentration settings
         mutate(Setting = as.character(lapply(Setting,
                                              function(x) {
