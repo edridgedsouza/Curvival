@@ -57,33 +57,27 @@ hasLabels <- function(bool, dataframe) {
 
 # To do: doseResponseSummary summarizer function
 
-summarizeDoses <- function(pureLongdata ,survPercent = 50){
-  
-  closestVals <- function(dataframe, percentage){
-    # Of course, data must be decreasing order
-    above <- max(which(dataframe["Survival"] %>% unlist %>% as.numeric > percentage))
-    below <- min(which(dataframe["Survival"] %>% unlist %>% as.numeric < percentage))
-    
-    abovePercent <- (dataframe["Survival"] %>% unlist %>% as.numeric)[above]
-    belowPercent <- (dataframe["Survival"] %>% unlist %>% as.numeric)[below]
-    aboveTime <- (dataframe["Time"] %>% unlist %>% as.numeric)[above]
-    belowTime <- (dataframe["Time"] %>% unlist %>% as.numeric)[below]
-    
-    percMean <- mean(c(abovePercent, belowPercent))
-    timeMean <- mean(c(aboveTime, belowTime))
-    
-    means <- data.frame(Time = timeMean, Survival = percMean)
-    cat(abovePercent, belowPercent, percMean, aboveTime, belowTime, timeMean)
-    return(means)
-  }
-  
-  summarized <- pureLongdata %>% group_by(Setting) %>% 
-    summarize(Time = closestVals(pureLongdata, survPercent)[1] %>% as.numeric,
-              Survival = closestVals(pureLongdata, survPercent)[2] %>% as.numeric)
+summarizeDoses <- function(pureLongdata , survPercent = 50) {
+  summarized <- pureLongdata %>% group_by(Setting) %>%
+    summarize(
+      Time = function(Time) {
+        above <- max(which(Survival %>% unlist %>% as.numeric > survPercent))
+        below <-
+          min(which(Survival %>% unlist %>% as.numeric < survPercent))
+        meanTime <- mean(c(Time[above], Time[below]))
+        return(meanTime)
+      },
+      Survival = function(Survival) {
+        above <- max(which(Survival %>% unlist %>% as.numeric > survPercent))
+        below <-
+          min(which(Survival %>% unlist %>% as.numeric < survPercent))
+        meanSurv <- mean(c(Survival[above], Survival[below]))
+        return(meanSurv)
+      }
+    )
   
   return(summarized)
 }
-
 
 # To do: dose response regression with nls(response ~ sSlogis(log10dose, Asym, xmid, scal), data = doseResponseSummary)
 # Rudimentary: plot(log10dose, response); model <- nls(blahblah)
