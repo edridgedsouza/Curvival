@@ -85,6 +85,13 @@ shinyUI(
           checkboxInput('transparent', 'Transparency', value = FALSE),
           checkboxInput('labels', 'Labels', value = FALSE),
           
+          checkboxInput('bool.percentage', 'Include dose response threshold', value = FALSE),
+          sliderInput("percentage", "Dose response  threshold", 
+            value = 50, 
+            min = 0,
+            max = 100,
+            step = 0.5),
+          
           sliderInput(
             'asprat',
             'Aspect Ratio',
@@ -132,6 +139,7 @@ shinyUI(
           ),
           checkboxInput('dr.transparent', 'Transparency', value = FALSE),
           checkboxInput('dr.labels', 'Labels', value = FALSE),
+        
           
           sliderInput(
             'dr.asprat',

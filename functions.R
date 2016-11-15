@@ -25,6 +25,15 @@ returnColorScale <- function(colortext){
   }
 }
 
+returnPercentageLine <- function(bool, yint){
+  if (!bool){
+    return(NULL)
+  }
+  else{
+    return(geom_hline(yintercept = as.numeric(yint), linetype = 3))
+  }
+}
+
 returnTransparent <- function(bool){
   if (bool) {
     x <- theme( # https://stackoverflow.com/a/7455481/5905166

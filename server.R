@@ -45,8 +45,9 @@ shinyServer(function(input, output) {
         coord_fixed(ratio = as.numeric(input$asprat)) +
         returnTransparent(input$transparent) +
         ggtitle(input$plotTitle) +
-        hasLabels(input$labels, longdata)
-      
+        hasLabels(input$labels, longdata) +
+        returnPercentageLine(bool = input$bool.percentage, 
+                             yint = input$percentage)
     }
   }, bg = "transparent")
   
