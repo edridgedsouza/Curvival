@@ -82,9 +82,9 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
     else above <- max(which(survival == max(survival)))
     
     if (whichBelow %>% any){
-    below <- min(whichBelow)
+      below <- min(whichBelow)
     }
-    else below <- min(which(survival == min(survival)))
+    else below <- 1 # When there are no lower values, you default to the first element.
     
     
     if (above == below){
