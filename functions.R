@@ -72,13 +72,25 @@ hasLabels <- function(bool, dataframe) {
 summarizeDoses <- function(pureLongdata , survPercent = 50) {
   
   meanTime <- function(time, survival) {
-    if (which(survival == survPercent) %>% any){
+    whichAbove <- which(survival >= survPercent)
+    whichBelow <- which(survival <= survPercent)
+    
+    # Unsuccessful attempt to fix problems when the threshold is set very low
+    if (whichAbove %>% any){
+      above <- max(whichAbove)
+    }
+    else above <- max(which(survival == max(survival)))
+    
+    if (whichBelow %>% any){
+    below <- min(whichBelow)
+    }
+    else below <- min(which(survival == min(survival)))
+    
+    
+    if (above == below){
       return(time[min(which(survival == survPercent))])
     }
     else{
-        above <- max(which(survival > survPercent))
-        below <- min(which(survival < survPercent))
-        
         aboveSurv <- survival[above]
         belowSurv <- survival[below]
         aboveTime <- time[above]

@@ -85,12 +85,12 @@ shinyServer(function(input, output) {
         as.data.frame()
       
       # Will change this later, only temporary
-      ggplot(summarizeDoses(pure_longdata, input$percentage), aes(x = Setting,
-                                y = Time)) +
+      ggplot(summarizeDoses(pure_longdata, input$dr.percentage), 
+             aes(x = Setting, y = Time)) +
         geom_point(aes(color = Setting)) +
         returnTheme(input$dr.theme) +
         returnColorScale(input$dr.colorscale) +
-        #coord_fixed(ratio = as.numeric(input$dr.asprat)) +
+        # coord_fixed(ratio = as.numeric(input$dr.asprat)) +
         returnTransparent(input$dr.transparent) +
         ggtitle(input$dr.plotTitle) +
         hasLabels(input$dr.labels, pure_longdata)
