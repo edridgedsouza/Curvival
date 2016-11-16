@@ -116,6 +116,31 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
   return(summarized)
 }
 
+drawLine <- function(bool, dataframe){
+  if(!bool){
+    return(NULL)
+  }
+  else{
+    cont <- nls.control(maxiter = 2000, tol = 1e-10, minFactor = 1/32768, warnOnly = TRUE)
+    regression <- nls(Time ~ SSlogis(Setting, Asym, xmid, scal), 
+                      data = dataframe, 
+                      control = cont,
+                      start = list(xmid = dataframe["Setting"] %>% 
+                                     unlist %>% 
+                                     as.numeric %>% 
+                                     mean,
+                                   Asym = dataframe["Setting"] %>%
+                                     unlist %>% as.numeric %>% max,
+                                   scal = 1))
+    
+    fit <- data.frame(Conc = dataframe["Setting"], Pred = predict(regression))
+    
+    layer <- geom_line(fit, aes(Conc, Pred))
+    return(layer)
+  }
+  
+}
+
 # To do: dose response regression with nls(response ~ sSlogis(log10dose, Asym, xmid, scal), data = doseResponseSummary)
 # Rudimentary: plot(log10dose, response); model <- nls(blahblah)
 # lines(log10dose, predict(model))

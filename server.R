@@ -83,8 +83,9 @@ shinyServer(function(input, output) {
         mutate(Setting = as.factor(Setting)) %>%
         as.data.frame()
       
-      # Will change this later, only temporary
-      ggplot(summarizeDoses(pure_longdata, input$dr.percentage),
+      doseResponse <- summarizeDoses(pure_longdata, input$dr.percentage)
+      
+      ggplot(doseResponse,
              aes(x = Setting, y = Time)) +
         geom_point(aes(color = Setting)) +
         returnTheme(input$dr.theme) +
