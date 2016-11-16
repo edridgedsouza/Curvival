@@ -151,9 +151,8 @@ drawLine <- function(bool, dataframe){
       #                                  unlist %>% as.numeric %>% max,
       #                                scal = 1))
       # https://bscheng.com/2014/05/07/modeling-logistic-growth-data-in-r/
-      regression <- nlsLM(Time ~ phi1/(1+exp(-(phi2+(phi3)*(Setting %>% unlist %>% as.numeric)))), 
-                        data = dataframe,
-                        start = list(phi1 = 26.5, phi2 = 19, phi3= -17))
+      regression <- nlsLM(Time ~ SSlogis(as.numeric(Setting %>% unlist), Asym, xmid, scal), 
+                        data = dataframe)
     }
       
     fit <- data.frame(Conc = dataframe["Setting"] %>% unlist %>% as.numeric, 
