@@ -97,7 +97,7 @@ shinyServer(function(input, output) {
         returnTransparent(input$dr.transparent) +
         ggtitle(input$dr.plotTitle) +
         hasLabels(input$dr.labels, pure_longdata) + 
-        drawLine(TRUE, pure_longdata)
+        drawLine(TRUE, doseResponse)
       
     }
   }, bg = "transparent")

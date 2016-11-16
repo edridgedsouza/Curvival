@@ -144,7 +144,7 @@ drawLine <- function(bool, dataframe){
       # https://bscheng.com/2014/05/07/modeling-logistic-growth-data-in-r/
       Asym_start <- max(time)
       xmid_start <- mean(setting)
-      scal_start <- max(time)-min(time)
+      scal_start <- max(time)
       
       regression <- nlsLM(time ~ Asym/(1 + exp((xmid - setting)/scal)), 
                         start = list(Asym = Asym_start,
@@ -153,7 +153,7 @@ drawLine <- function(bool, dataframe){
                                      ))
     }
       
-    fit <- data.frame(Conc = dataframe["Setting"] %>% unlist %>% as.numeric, 
+    fit <- data.frame(Conc = setting, 
                       Pred = predict(regression))
     
     layer <- geom_line(data = fit, aes(Conc, Pred), linetype=3)
