@@ -90,7 +90,7 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
     }
     else{
       below <-
-      1 # When there are no lower values, you default to the first element.
+        1 # When there are no lower values, you default to the first element.
     }
     
     if (above == below) {
@@ -123,8 +123,8 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
   return(summarized)
 }
 
-drawLine <- function(bool, dataframe){
-  if(!bool){
+drawLine <- function(bool, dataframe) {
+  if (!bool) {
     return(NULL)
   }
   else{
@@ -132,11 +132,18 @@ drawLine <- function(bool, dataframe){
     time <- dataframe["Time"] %>% unlist %>% as.numeric
     numSettings <- setting %>% length
     
-    if (numSettings < 2){
+    if (numSettings < 2) {
       return(NULL)
     }
-    else if(numSettings == 2){
+    else if (numSettings == 2) {
       regression <- lm(time ~ setting)
+      
+      m <- coef(regression)["setting"]
+      b <- coef(regression)["(Intercept)"]
+      
+      fit <-
+        data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
+        mutate(Pred = m*Conc + b)
     }
     
     else{
@@ -146,22 +153,29 @@ drawLine <- function(bool, dataframe){
       xmid_start <- 9.513e+00 #mean(setting)
       scal_start <- 9.167e-01 #max(time)
       
-      regression <- nlsLM(time ~ Asym/(1 + exp((xmid - setting)/scal)), 
-                        start = list(Asym = Asym_start,
-                                     xmid = xmid_start,
-                                     scal = scal_start
-                                     ),
-                        control = nls.lm.control(maxiter = 500))
+      regression <-
+        nlsLM(
+          time ~ Asym / (1 + exp((xmid - setting) / scal)),
+          start = list(
+            Asym = Asym_start,
+            xmid = xmid_start,
+            scal = scal_start
+          ),
+          control = nls.lm.control(maxiter = 500)
+        )
+      
+        Asym <- coef(regression)["Asym"]
+        xmid <- coef(regression)["xmid"]
+        scal <- coef(regression)["scal"]
+        
+        fit <-
+          data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
+          mutate(Pred = Asym / (1 + exp((xmid - Conc) / scal))) # A high-resolution prediction
     }
     
-    Asym = coef(regression)["Asym"]
-    xmid = coef(regression)["xmid"]
-    scal = coef(regression)["scal"]
-      
-    fit <- data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>% 
-      mutate(Pred = Asym/(1 + exp((xmid - Conc)/scal))) # A high-resolution prediction
     
-    layer <- geom_line(data = fit, aes(Conc, Pred), linetype=3)
+    
+    layer <- geom_line(data = fit, aes(Conc, Pred), linetype = 3)
     
     return(layer)
     
