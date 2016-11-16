@@ -143,7 +143,7 @@ drawLine <- function(bool, dataframe) {
       
       fit <-
         data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
-        mutate(Pred = m*Conc + b)
+        mutate(Pred = m * Conc + b)
     }
     
     else{
@@ -164,13 +164,13 @@ drawLine <- function(bool, dataframe) {
           control = nls.lm.control(maxiter = 500)
         )
       
-        Asym <- coef(regression)["Asym"]
-        xmid <- coef(regression)["xmid"]
-        scal <- coef(regression)["scal"]
-        
-        fit <-
-          data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
-          mutate(Pred = Asym / (1 + exp((xmid - Conc) / scal))) # A high-resolution prediction
+      Asym <- coef(regression)["Asym"]
+      xmid <- coef(regression)["xmid"]
+      scal <- coef(regression)["scal"]
+      
+      fit <-
+        data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
+        mutate(Pred = Asym / (1 + exp((xmid - Conc) / scal))) # A high-resolution prediction
     }
     
     

@@ -86,7 +86,8 @@ shinyServer(function(input, output) {
         mutate(Setting = as.factor(Setting)) %>%
         as.data.frame()
       
-      doseResponse <- summarizeDoses(pure_longdata, input$dr.percentage)
+      doseResponse <-
+        summarizeDoses(pure_longdata, input$dr.percentage)
       
       ggplot(doseResponse,
              aes(x = Setting, y = Time)) +
@@ -96,7 +97,7 @@ shinyServer(function(input, output) {
         # coord_fixed(ratio = as.numeric(input$dr.asprat)) +
         returnTransparent(input$dr.transparent) +
         ggtitle(input$dr.plotTitle) +
-        hasLabels(input$dr.labels, pure_longdata) + 
+        hasLabels(input$dr.labels, pure_longdata) +
         drawLine(TRUE, doseResponse)
       
     }
