@@ -142,15 +142,16 @@ drawLine <- function(bool, dataframe){
     else{
       # Help from http://datascienceplus.com/first-steps-with-non-linear-regression-in-r/
       # https://bscheng.com/2014/05/07/modeling-logistic-growth-data-in-r/
-      Asym_start <- max(time)
-      xmid_start <- mean(setting)
-      scal_start <- max(time)
+      Asym_start <- 1.704e+04 #max(time)
+      xmid_start <- 9.513e+00 #mean(setting)
+      scal_start <- 9.167e-01 #max(time)
       
       regression <- nlsLM(time ~ Asym/(1 + exp((xmid - setting)/scal)), 
                         start = list(Asym = Asym_start,
                                      xmid = xmid_start,
                                      scal = scal_start
-                                     ))
+                                     ),
+                        control = nls.lm.control(maxiter = 500))
     }
       
     fit <- data.frame(Conc = setting, 
