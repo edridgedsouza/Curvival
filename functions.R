@@ -1,6 +1,7 @@
 library(ggplot2)
 library(dplyr)
 library(magrittr)
+library(minpack.lm)
 
 returnTheme <- function(themetext) {
   switch(
@@ -87,10 +88,10 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
     if (whichBelow %>% any) {
       below <- min(whichBelow)
     }
-    else
+    else{
       below <-
       1 # When there are no lower values, you default to the first element.
-    
+    }
     
     if (above == below) {
       return(time[min(which(survival == survPercent))])
@@ -101,10 +102,16 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
       aboveTime <- time[above]
       belowTime <- time[below]
       
-      ratio <- (survPercent - belowSurv) / (aboveSurv - belowSurv)
+      if (aboveTime == belowTime) {
+        return(aboveTime)
+      }
       
-      meantime <- belowTime + ratio * (aboveTime - belowTime)
-      return(meantime)
+      else{
+        ratio <- (survPercent - belowSurv) / (aboveSurv - belowSurv)
+        
+        meantime <- belowTime + ratio * (aboveTime - belowTime)
+        return(meantime)
+      }
     }
   }
   
@@ -121,22 +128,41 @@ drawLine <- function(bool, dataframe){
     return(NULL)
   }
   else{
-    cont <- nls.control(maxiter = 2000, tol = 1e-10, minFactor = 1/32768, warnOnly = TRUE)
-    regression <- nls(Time ~ SSlogis(Setting, Asym, xmid, scal), 
-                      data = dataframe, 
-                      control = cont,
-                      start = list(xmid = dataframe["Setting"] %>% 
-                                     unlist %>% 
-                                     as.numeric %>% 
-                                     mean,
-                                   Asym = dataframe["Setting"] %>%
-                                     unlist %>% as.numeric %>% max,
-                                   scal = 1))
+    numSettings <- dataframe["Setting"] %>% unlist %>% unique %>% length
     
-    fit <- data.frame(Conc = dataframe["Setting"], Pred = predict(regression))
+    if (numSettings < 2){
+      return(NULL)
+    }
+    else if(numSettings == 2){
+      regression <- lm(Time ~ as.numeric(Setting %>% unlist), data = dataframe)
+    }
     
-    layer <- geom_line(fit, aes(Conc, Pred))
+    else{
+      # Help from http://datascienceplus.com/first-steps-with-non-linear-regression-in-r/
+      # cont <- nls.control(maxiter = 2000, tol = 1e-10, minFactor = 1/32768, warnOnly = TRUE)
+      # regression <- nls(Time ~ SSlogis(as.numeric(Setting %>% unlist), Asym, xmid, scal), 
+      #                   data = dataframe, 
+      #                   control = cont,
+      #                   start = list(xmid = dataframe["Setting"] %>% 
+      #                                  unlist %>% 
+      #                                  as.numeric %>% 
+      #                                  mean,
+      #                                Asym = dataframe["Setting"] %>%
+      #                                  unlist %>% as.numeric %>% max,
+      #                                scal = 1))
+      # https://bscheng.com/2014/05/07/modeling-logistic-growth-data-in-r/
+      regression <- nlsLM(Time ~ phi1/(1+exp(-(phi2+(phi3)*(Setting %>% unlist %>% as.numeric)))), 
+                        data = dataframe,
+                        start = list(phi1 = 26.5, phi2 = 19, phi3= -17))
+    }
+      
+    fit <- data.frame(Conc = dataframe["Setting"] %>% unlist %>% as.numeric, 
+                      Pred = predict(regression))
+    
+    layer <- geom_line(data = fit, aes(Conc, Pred), linetype=3)
+    
     return(layer)
+    
   }
   
 }

@@ -70,15 +70,18 @@ shinyServer(function(input, output) {
       colnames(data)[1] <- "Time"
       longdata <- data %>% melt(id = "Time",
                                 variable.name = "Setting",
-                                value.name = "Survival")
-      
-      
-      pure_longdata <- # Needs more intelligent unit parser
-        longdata %>%  # Extract only the numbers from the concentration settings
+                                value.name = "Survival") %>%  # Extract only the numbers from the concentration settings
         mutate(Setting = as.character(lapply(Setting,
                                              function(x) {
                                                gsub("(\\d*)\\D*", "\\1", x)
-                                             }))) %>%
+                                             })))
+      
+      # Manipulation to add a setting for "zero drug" if not already present
+      # Just assumes no death at all.
+      
+      
+      pure_longdata <- # Needs more intelligent unit parser
+        longdata  %>%
         mutate(Setting = -1 * log10(as.numeric(Setting)) %>% round(3)) %>%
         mutate(Setting = as.factor(Setting)) %>%
         as.data.frame()
@@ -87,13 +90,14 @@ shinyServer(function(input, output) {
       
       ggplot(doseResponse,
              aes(x = Setting, y = Time)) +
-        geom_point(aes(color = Setting)) +
+        geom_point() +
         returnTheme(input$dr.theme) +
         returnColorScale(input$dr.colorscale) +
         # coord_fixed(ratio = as.numeric(input$dr.asprat)) +
         returnTransparent(input$dr.transparent) +
         ggtitle(input$dr.plotTitle) +
-        hasLabels(input$dr.labels, pure_longdata)
+        hasLabels(input$dr.labels, pure_longdata) + 
+        drawLine(TRUE, pure_longdata)
       
     }
   }, bg = "transparent")
