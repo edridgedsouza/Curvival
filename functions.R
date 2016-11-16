@@ -153,9 +153,13 @@ drawLine <- function(bool, dataframe){
                                      ),
                         control = nls.lm.control(maxiter = 500))
     }
+    
+    Asym = coef(regression)["Asym"]
+    xmid = coef(regression)["xmid"]
+    scal = coef(regression)["scal"]
       
-    fit <- data.frame(Conc = setting, 
-                      Pred = predict(regression))
+    fit <- data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>% 
+      mutate(Pred = Asym/(1 + exp((xmid - Conc)/scal))) # A high-resolution prediction
     
     layer <- geom_line(data = fit, aes(Conc, Pred), linetype=3)
     
