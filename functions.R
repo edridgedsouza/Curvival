@@ -128,31 +128,29 @@ drawLine <- function(bool, dataframe){
     return(NULL)
   }
   else{
-    numSettings <- dataframe["Setting"] %>% unlist %>% unique %>% length
+    setting <- dataframe["Setting"] %>% unlist %>% as.numeric
+    time <- dataframe["Time"] %>% unlist %>% as.numeric
+    numSettings <- setting %>% length
     
     if (numSettings < 2){
       return(NULL)
     }
     else if(numSettings == 2){
-      regression <- lm(Time ~ as.numeric(Setting %>% unlist), data = dataframe)
+      regression <- lm(time ~ setting)
     }
     
     else{
       # Help from http://datascienceplus.com/first-steps-with-non-linear-regression-in-r/
-      # cont <- nls.control(maxiter = 2000, tol = 1e-10, minFactor = 1/32768, warnOnly = TRUE)
-      # regression <- nls(Time ~ SSlogis(as.numeric(Setting %>% unlist), Asym, xmid, scal), 
-      #                   data = dataframe, 
-      #                   control = cont,
-      #                   start = list(xmid = dataframe["Setting"] %>% 
-      #                                  unlist %>% 
-      #                                  as.numeric %>% 
-      #                                  mean,
-      #                                Asym = dataframe["Setting"] %>%
-      #                                  unlist %>% as.numeric %>% max,
-      #                                scal = 1))
       # https://bscheng.com/2014/05/07/modeling-logistic-growth-data-in-r/
-      regression <- nlsLM(Time ~ SSlogis(as.numeric(Setting %>% unlist), Asym, xmid, scal), 
-                        data = dataframe)
+      Asym_start <- max(time)
+      xmid_start <- mean(setting)
+      scal_start <- max(time)-min(time)
+      
+      regression <- nlsLM(time ~ Asym/(1 + exp((xmid - setting)/scal)), 
+                        start = list(Asym = Asym_start,
+                                     xmid = xmid_start,
+                                     scal = scal_start
+                                     ))
     }
       
     fit <- data.frame(Conc = dataframe["Setting"] %>% unlist %>% as.numeric, 
