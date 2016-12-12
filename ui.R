@@ -85,10 +85,10 @@ shinyUI(
           checkboxInput('transparent', 'Transparency', value = FALSE),
           checkboxInput('labels', 'Labels', value = FALSE),
           
-          checkboxInput('bool.percentage', 'Include dose response threshold', value = FALSE),
+          checkboxInput('bool.percentage', 'Include longevity threshold', value = FALSE),
           sliderInput(
             "percentage",
-            "Dose response  threshold",
+            "Longevity threshold",
             value = 50,
             min = 0,
             max = 100,
@@ -110,14 +110,14 @@ shinyUI(
       )
     ),
     tabPanel(
-      "Dose Response",
-      headerPanel("Curvival Dose Response Plot", windowTitle = "Curvival App"),
+      "Longevity",
+      headerPanel("Curvival Longevity Plot", windowTitle = "Curvival App"),
       sidebarLayout(
         sidebarPanel(
-          textInput('dr.plotTitle', 'Plot Title', value = "Dose Response Curve"),
+          textInput('l.plotTitle', 'Plot Title', value = "Longevity Curve"),
           
           selectInput(
-            'dr.theme',
+            'l.theme',
             'Plot Theme',
             c(
               'Black and White' = 'bw',
@@ -134,25 +134,24 @@ shinyUI(
           ),
           
           selectInput(
-            'dr.colorscale',
+            'l.colorscale',
             'ColorBrewer Scale',
             c(Choose = '', colorOpts),
             selectize = TRUE,
             multiple = FALSE
           ),
-          checkboxInput('dr.transparent', 'Transparency', value = FALSE),
-          checkboxInput('dr.labels', 'Labels', value = FALSE),
+          checkboxInput('l.transparent', 'Transparency', value = FALSE),
           
           sliderInput(
-            "dr.percentage",
-            "Dose response percent threshold",
+            "l.percentage",
+            "Longevity percent threshold",
             value = 50,
             min = 0,
             max = 100,
             step = 0.5
           ),
           sliderInput(
-            'dr.asprat',
+            'l.asprat',
             'Aspect Ratio',
             value = 1,
             min = 0 ,
@@ -162,7 +161,7 @@ shinyUI(
         ),
         
         # Show a plot of the generated distribution
-        mainPanel(plotOutput("doseResponse"))
+        mainPanel(plotOutput("longevity"))
       )
       
       

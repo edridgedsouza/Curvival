@@ -51,9 +51,9 @@ shinyServer(function(input, output) {
     }
   }, bg = "transparent")
   
-  # Focus on the dose-response curve tab now
+  # Focus on the longevity curve tab now
   
-  output$doseResponse <- renderPlot({
+  output$longevity <- renderPlot({
     # Still have to re-load this all bc dynamic loading or something
     survdata <- input$datafile
     if (is.null(survdata)) {
@@ -86,19 +86,18 @@ shinyServer(function(input, output) {
         mutate(Setting = as.factor(Setting)) %>%
         as.data.frame()
       
-      doseResponse <-
-        summarizeDoses(pure_longdata, input$dr.percentage)
+      longevity <-
+        summarizeLongevity(pure_longdata, input$l.percentage)
       
-      ggplot(doseResponse,
+      ggplot(longevity,
              aes(x = Setting, y = Time)) +
         geom_point() +
-        returnTheme(input$dr.theme) +
-        returnColorScale(input$dr.colorscale) +
+        returnTheme(input$l.theme) +
+        returnColorScale(input$l.colorscale) +
         # coord_fixed(ratio = as.numeric(input$dr.asprat)) +
-        returnTransparent(input$dr.transparent) +
-        ggtitle(input$dr.plotTitle) +
-        hasLabels(input$dr.labels, pure_longdata) +
-        drawLine(TRUE, doseResponse)
+        returnTransparent(input$l.transparent) +
+        ggtitle(input$l.plotTitle) +
+        drawLine(TRUE, longevity)
       
     }
   }, bg = "transparent")

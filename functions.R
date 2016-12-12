@@ -73,7 +73,7 @@ hasLabels <- function(bool, dataframe) {
 # for a given percentage survival, you find the amount of time
 # at each concentration that it takes to get to that percentage.
 
-summarizeDoses <- function(pureLongdata , survPercent = 50) {
+summarizeLongevity <- function(pureLongdata , survPercent = 50) {
   meanTime <- function(time, survival) {
     whichAbove <- which(survival >= survPercent)
     whichBelow <- which(survival <= survPercent)
@@ -109,7 +109,7 @@ summarizeDoses <- function(pureLongdata , survPercent = 50) {
       else{
         ratio <- (survPercent - belowSurv) / (aboveSurv - belowSurv)
         
-        meantime <- belowTime + ratio * (aboveTime - belowTime)
+        meantime <- aboveTime + ratio * (belowTime - aboveTime) # If this seems off to you, realize that aboveTime will actually be a lower number
         return(meantime)
       }
     }
