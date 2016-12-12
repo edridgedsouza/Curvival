@@ -97,7 +97,7 @@ shinyServer(function(input, output) {
         # coord_fixed(ratio = as.numeric(input$dr.asprat)) +
         returnTransparent(input$l.transparent) +
         ggtitle(input$l.plotTitle) +
-        drawLine(TRUE, longevity)
+        drawLongevityLine(TRUE, longevity)
       
     }
   }, bg = "transparent")
@@ -124,12 +124,18 @@ shinyServer(function(input, output) {
         mutate(Setting = as.character(lapply(Setting,
                                              function(x) {
                                                gsub("(\\d*)\\D*", "\\1", x)
-                                             })))
+                                             })
+                                      )
+               )
       
+      finalTime <- longdata %>% group_by(Setting) %>% 
+        summarize(Survival = min(Survival)) %>%# Find the survival at the bottom
+        mutate(Setting = -1 * log10(as.numeric(Setting)) %>% round(3)) %>%
+        mutate(Setting = as.factor(Setting))
       
-      # Now take longdata and summarize by the last time point
-      # Then use that as a y-axis, where the x-axis is -Log10[Concentration]
-      # Then ggplot it with a response curve
+      ggplot(finalTime, aes(Setting, Survival)) + 
+        geom_point() + 
+        drawDRLine(TRUE, finalTime)
       
     }
     

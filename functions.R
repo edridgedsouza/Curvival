@@ -123,7 +123,7 @@ summarizeLongevity <- function(pureLongdata , survPercent = 50) {
   return(summarized)
 }
 
-drawLine <- function(bool, dataframe) {
+drawLongevityLine <- function(bool, dataframe) {
   if (!bool) {
     return(NULL)
   }
@@ -182,6 +182,66 @@ drawLine <- function(bool, dataframe) {
   }
   
 }
+
+
+drawDRLine <- function(bool, dataframe) {
+  if (!bool) {
+    return(NULL)
+  }
+  else{
+    setting <- dataframe["Setting"] %>% unlist %>% as.numeric
+    survival <- dataframe["Survival"] %>% unlist %>% as.numeric
+    numSettings <- setting %>% length
+    
+    if (numSettings < 2) {
+      return(NULL)
+    }
+    else if (numSettings == 2) {
+      regression <- lm(survival ~ setting)
+      
+      m <- coef(regression)["setting"]
+      b <- coef(regression)["(Intercept)"]
+      
+      fit <-
+        data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
+        mutate(Pred = m * Conc + b)
+    }
+    
+    else{
+      # Help from http://datascienceplus.com/first-steps-with-non-linear-regression-in-r/
+      # https://bscheng.com/2014/05/07/modeling-logistic-growth-data-in-r/
+      Asym_start <- 1.704e+04 #max(time)
+      xmid_start <- 9.513e+00 #mean(setting)
+      scal_start <- 9.167e-01 #max(time)
+      
+      regression <-
+        nlsLM(
+          survival ~ Asym / (1 + exp((xmid - setting) / scal)),
+          start = list(
+            Asym = Asym_start,
+            xmid = xmid_start,
+            scal = scal_start
+          ),
+          control = nls.lm.control(maxiter = 500)
+        )
+      
+      Asym <- coef(regression)["Asym"]
+      xmid <- coef(regression)["xmid"]
+      scal <- coef(regression)["scal"]
+      
+      fit <-
+        data.frame(Conc = seq(min(setting), max(setting), length.out = 500)) %>%
+        mutate(Pred = Asym / (1 + exp((xmid - Conc) / scal))) # A high-resolution prediction
+    }
+    
+    layer <- geom_line(data = fit, aes(Conc, Pred), linetype = 3)
+    
+    return(layer)
+    
+  }
+  
+}
+
 
 # To do: dose response regression with nls(response ~ sSlogis(log10dose, Asym, xmid, scal), data = doseResponseSummary)
 # Rudimentary: plot(log10dose, response); model <- nls(blahblah)
