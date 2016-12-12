@@ -101,4 +101,43 @@ shinyServer(function(input, output) {
       
     }
   }, bg = "transparent")
+  
+  
+  
+  output$doseResponse <- renderPlot({
+    survdata <- input$datafile
+    if (is.null(survdata)) {
+      return(NULL)
+    }
+    else{
+      data <- read.csv(
+        survdata$datapath,
+        header = TRUE,
+        sep = input$sep,
+        quote = input$quote,
+        check.names = FALSE
+      )
+      colnames(data)[1] <- "Time"
+      longdata <- data %>% melt(id = "Time",
+                                variable.name = "Setting",
+                                value.name = "Survival") %>%  # Extract only the numbers from the concentration settings
+        mutate(Setting = as.character(lapply(Setting,
+                                             function(x) {
+                                               gsub("(\\d*)\\D*", "\\1", x)
+                                             })))
+      
+      
+      # Now take longdata and summarize by the last time point
+      # Then use that as a y-axis, where the x-axis is -Log10[Concentration]
+      # Then ggplot it with a response curve
+      
+    }
+    
+    
+    
+  })
+  
 })
+
+
+

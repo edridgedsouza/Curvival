@@ -109,6 +109,8 @@ shinyUI(
         mainPanel(plotOutput("survPlot"))
       )
     ),
+    
+    
     tabPanel(
       "Longevity",
       headerPanel("Curvival Longevity Plot", windowTitle = "Curvival App"),
@@ -166,6 +168,57 @@ shinyUI(
       
       
     ),
+    
+    tabPanel(
+      "Dose Response",
+      headerPanel("Curvival Dose Response Plot", windowTitle = "Curvival App"),
+      sidebarLayout(
+        sidebarPanel(
+          textInput('dr.plotTitle', 'Plot Title', value = "Dose Response Curve"),
+          
+          selectInput(
+            'dr.theme',
+            'Plot Theme',
+            c(
+              'Black and White' = 'bw',
+              'Dark' = 'dark',
+              'Grey' = 'grey',
+              'Void' = 'void',
+              'Light' = 'light',
+              'Classic' = 'classic',
+              'Minimal' = 'minimal',
+              'Line Drawing' = 'linedraw'
+            ),
+            'grey',
+            multiple = FALSE
+          ),
+          
+          selectInput(
+            'dr.colorscale',
+            'ColorBrewer Scale',
+            c(Choose = '', colorOpts),
+            selectize = TRUE,
+            multiple = FALSE
+          ),
+          checkboxInput('dr.transparent', 'Transparency', value = FALSE),
+
+          sliderInput(
+            'l.asprat',
+            'Aspect Ratio',
+            value = 1,
+            min = 0 ,
+            max = 3,
+            step = 0.01
+          )
+        ),
+        
+        # Show a plot of the generated distribution
+        mainPanel(plotOutput("doseResponse"))
+      )
+      
+      
+    ),
+    
     tabPanel(
       "Help",
       headerPanel("Curvival Help", windowTitle = "Curvival App")
