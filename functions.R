@@ -184,6 +184,12 @@ drawLongevityLine <- function(bool, dataframe) {
 }
 
 
+# To do: dose response regression with nls(response ~ sSlogis(log10dose, Asym, xmid, scal), data = doseResponseSummary)
+# Rudimentary: plot(log10dose, response); model <- nls(blahblah)
+# lines(log10dose, predict(model))
+
+
+
 drawDRLine <- function(bool, dataframe) {
   if (!bool) {
     return(NULL)
@@ -242,7 +248,3 @@ drawDRLine <- function(bool, dataframe) {
   
 }
 
-
-# To do: dose response regression with nls(response ~ sSlogis(log10dose, Asym, xmid, scal), data = doseResponseSummary)
-# Rudimentary: plot(log10dose, response); model <- nls(blahblah)
-# lines(log10dose, predict(model))
