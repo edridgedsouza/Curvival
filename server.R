@@ -47,7 +47,8 @@ shinyServer(function(input, output) {
         ggtitle(input$plotTitle) +
         hasLabels(input$labels, longdata) +
         returnPercentageLine(bool = input$bool.percentage,
-                             yint = input$percentage)
+                             yint = input$percentage) +
+        scale_y_continuous(limits=c(0,110))
     }
   }, bg = "transparent")
   
